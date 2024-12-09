@@ -210,6 +210,7 @@ public class SAP {
             if (set.contains(vertexW)) {
                 length = 0;
                 sca = vertexW;
+                return;
             }
             queueW.add(vertexW);
             distToW.put(vertexW, 0);
