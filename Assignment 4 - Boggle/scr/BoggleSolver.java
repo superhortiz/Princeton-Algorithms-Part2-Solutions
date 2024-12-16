@@ -9,6 +9,7 @@ public class BoggleSolver {
     private boolean[][] onStack; // Tracks the letters currently on the stack in DFS
     private int rowsBoard, colsBoard; // Dimensions of the Boggle board
     private Node root;  // Root of trie for the dictionary
+    private char[][] currentBoard;  // Stores the string representation of the board
 
     /**
      * Represents a node in the R-way trie structure.
@@ -50,10 +51,17 @@ public class BoggleSolver {
         result = new LinkedHashSet<>();
         StringBuilder word = new StringBuilder();
 
+        currentBoard = new char[rowsBoard][colsBoard];
+        for (int row = 0; row < rowsBoard; row++) {
+            for (int col = 0; col < colsBoard; col++) {
+                currentBoard[row][col] = board.getLetter(row, col);
+            }
+        }
+
         // Perform DFS from each cell on the board
         for (int row = 0; row < rowsBoard; row++) {
             for (int col = 0; col < colsBoard; col++) {
-                dfs(board, row, col, root, word);
+                dfs(row, col, root, word);
             }
         }
 
@@ -90,16 +98,15 @@ public class BoggleSolver {
     /**
      * Performs a depth-first search (DFS) to find all valid words starting from the given cell.
      *
-     * @param board The Boggle board.
-     * @param row   The current row position.
-     * @param col   The current column position.
-     * @param node  The current node in the trie.
-     * @param word  The current word being built.
+     * @param row  The current row position.
+     * @param col  The current column position.
+     * @param node The current node in the trie.
+     * @param word The current word being built.
      */
-    private void dfs(BoggleBoard board, int row, int col, Node node, StringBuilder word) {
+    private void dfs(int row, int col, Node node, StringBuilder word) {
         if (row < 0 || row >= rowsBoard || col < 0 || col >= colsBoard || onStack[row][col]) return;
 
-        char letter = board.getLetter(row, col);
+        char letter = currentBoard[row][col];
         String stringLetter;
         if (letter == 'Q') {
             stringLetter = "QU";
@@ -128,11 +135,11 @@ public class BoggleSolver {
             for (int moveCol = -1; moveCol <= 1; moveCol++) {
                 if (moveRow != 0 || moveCol != 0) {
                     if (letter == 'Q') {
-                        dfs(board, row + moveRow, col + moveCol,
+                        dfs(row + moveRow, col + moveCol,
                             node.next['Q' - 'A'].next['U' - 'A'], word);
                     }
                     else {
-                        dfs(board, row + moveRow, col + moveCol, node.next[letter - 'A'], word);
+                        dfs(row + moveRow, col + moveCol, node.next[letter - 'A'], word);
                     }
                 }
             }
