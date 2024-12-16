@@ -6,3 +6,4 @@ Solution Scores:
 - Assignment 2: 100 (Bonus)
 - Assignment 3: 100
 - Assignment 4: 100
+- Assignment 5: 100
